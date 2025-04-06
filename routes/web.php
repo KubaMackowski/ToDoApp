@@ -19,7 +19,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-   Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+    // Tasks
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
     Route::get('/tasks/{task}', [TaskController::class, 'show'])
         ->name('tasks.show')
@@ -37,6 +38,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/tasks/{task}', [TaskController::class, 'update'])
         ->name('tasks.update')
         ->can('view', 'task');
+    // Task Tokens
+    Route::get('/tasks/{task}/generate-token', [TaskController::class, 'generateToken'])
+        ->name('tasks.generateToken')
+        ->can('view', 'task');
+
 });
+
+Route::get('/tasks/public/{token}', [TaskController::class, 'showPublic'])->name('tasks.public');
 
 require __DIR__.'/auth.php';

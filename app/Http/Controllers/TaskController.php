@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Enums\TaskPriority;
 use App\Enums\TaskStatus;
 use App\Models\Task;
+use App\Models\TaskToken;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
@@ -78,8 +81,10 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        $taskToken = $task->tokens()->where('expires_at', '>', Carbon::now())->first();
         return view('tasks.show', [
-            'task' => $task
+            'task' => $task,
+            'taskToken' => $taskToken,
         ]);
     }
 
@@ -125,5 +130,32 @@ class TaskController extends Controller
         $task->delete();
 
         return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
+    }
+
+    public function generateToken(Task $task)
+    {
+        $token = Str::random(32);
+        $expiresAt = Carbon::now()->addHours(24); // Token valid for 24 hours
+
+        TaskToken::create([
+            'task_id' => $task->id,
+            'token' => $token,
+            'expires_at' => $expiresAt,
+        ]);
+
+        return redirect()->route('tasks.show', ['task' => $task])->with('success', 'Token created successfully.');
+    }
+
+    public function showPublic($token)
+    {
+        $taskToken = TaskToken::where('token', $token)->firstOrFail();
+
+        if ($taskToken->isExpired()) {
+            abort(403, 'This link has expired.');
+        }
+
+        $task = $taskToken->task;
+
+        return view('tasks.show', compact('task'));
     }
 }
