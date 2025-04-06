@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
             $table->enum('status', ['to-do', 'in progress', 'done'])->default('to-do');
+            $table->boolean('mail_sent')->default(false);
             $table->timestamp('deadline');
             $table->timestamps();
         });
