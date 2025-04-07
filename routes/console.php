@@ -22,4 +22,5 @@ Schedule::call(function () {
         $task->update(['mail_sent' => true]);
         SendTaskReminder::dispatch($task);
     }
-})->everyMinute();
+    // TODO: Zmienić w razie testowania
+})->daily();

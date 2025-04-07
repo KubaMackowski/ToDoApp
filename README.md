@@ -50,3 +50,5 @@
     ```
 8. **Uruchom aplikację:**
    Aplikacja powinna działać pod adresem `http://localhost:8000`. Możesz to sprawdzić, otwierając przeglądarkę i wpisując ten adres.
+
+W przypadku testowania maili warto zmienić w pliku routes/console.php ->daily() na np. ->everyMinute()
