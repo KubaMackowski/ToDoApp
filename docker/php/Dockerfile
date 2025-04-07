@@ -11,7 +11,5 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Install Node.js and npm
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
-    && npm install \
-    && npm run build \
 
 WORKDIR /var/www

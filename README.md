@@ -34,8 +34,12 @@
     ```sh
     docker exec todo_app php artisan migrate
     ```
-
-6. **Uruchom scheduler i queue:**
+6. **Zbuduj npm:**
+    ```sh
+    docker exec todo_app npm install
+    docker exec todo_app npm run build
+    ```
+7. **Uruchom scheduler i queue:**
    W osobnym terminalu uruchom:
     ```sh
     docker exec -d todo_app php artisan schedule:work
@@ -44,5 +48,5 @@
     ```sh
     docker exec -d todo_app php artisan queue:work
     ```
-7. **Uruchom aplikację:**
+8. **Uruchom aplikację:**
    Aplikacja powinna działać pod adresem `http://localhost:8000`. Możesz to sprawdzić, otwierając przeglądarkę i wpisując ten adres.
